@@ -4,7 +4,6 @@ dotenv.config();
 import { createApiRoot } from '../client/create.client.js';
 import { assertError, assertString } from '../utils/assert.utils.js';
 import {
-  createCustomCartDiscountType,
   createCartUpdateExtension,
 } from './actions.js';
 
@@ -17,7 +16,6 @@ async function postDeploy(properties) {
 
   const apiRoot = createApiRoot();
   await createCartUpdateExtension(apiRoot, applicationUrl);
-  await createCustomCartDiscountType(apiRoot);
 }
 
 async function run() {

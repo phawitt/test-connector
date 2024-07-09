@@ -1,5 +1,4 @@
-const CART_UPDATE_EXTENSION_KEY = 'myconnector-cartUpdateExtension';
-const CART_DISCOUNT_TYPE_KEY = 'myconnector-cartDiscountType';
+const CART_UPDATE_EXTENSION_KEY = 'test-connector-cart-extension';
 
 export async function createCartUpdateExtension(apiRoot, applicationUrl) {
   const {
@@ -39,7 +38,7 @@ export async function createCartUpdateExtension(apiRoot, applicationUrl) {
         triggers: [
           {
             resourceTypeId: 'cart',
-            actions: ['Update'],
+            actions: ['Create'],
           },
         ],
       },
@@ -72,56 +71,4 @@ export async function deleteCartUpdateExtension(apiRoot) {
       })
       .execute();
   }
-}
-
-export async function createCustomCartDiscountType(apiRoot) {
-  const {
-    body: { results: types },
-  } = await apiRoot
-    .types()
-    .get({
-      queryArgs: {
-        where: `key = "${CART_DISCOUNT_TYPE_KEY}"`,
-      },
-    })
-    .execute();
-
-  if (types.length > 0) {
-    const type = types[0];
-
-    await apiRoot
-      .types()
-      .withKey({ key: CART_DISCOUNT_TYPE_KEY })
-      .delete({
-        queryArgs: {
-          version: type.version,
-        },
-      })
-      .execute();
-  }
-
-  await apiRoot
-    .types()
-    .post({
-      body: {
-        key: CART_DISCOUNT_TYPE_KEY,
-        name: {
-          en: 'Custom type to store a string',
-        },
-        resourceTypeIds: ['cart-discount'],
-        fieldDefinitions: [
-          {
-            type: {
-              name: 'String',
-            },
-            name: 'customCartField',
-            label: {
-              en: 'Custom cart field',
-            },
-            required: false,
-          },
-        ],
-      },
-    })
-    .execute();
 }
